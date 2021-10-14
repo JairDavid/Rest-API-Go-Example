@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rest-api-market/connection"
 	"github.com/rest-api-market/model"
@@ -44,8 +46,10 @@ func (cs *categoryService) Delete(c *gin.Context) {
 func (cs *categoryService) Update(c *gin.Context) {
 	var category model.Category
 	c.BindJSON(&category)
+	log.Print(category)
 	db := connection.GetConnection()
 	db.Find(&category, category.ID)
+	log.Print(category)
 
 }
 
