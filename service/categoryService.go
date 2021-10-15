@@ -16,6 +16,12 @@ type Methods interface {
 	GetbyId(c *gin.Context) model.Category
 }
 
+type CategoryPatch struct {
+	ID          int    `json:"ID" binding:"required"`
+	Name        string `json:"name,omitempty" binding:"required"`
+	Description string `json:"description,omitempty" binding:"required"`
+}
+
 type categoryService struct {
 }
 
@@ -25,17 +31,11 @@ func New() Methods {
 
 func (cs *categoryService) Create(c *gin.Context) (model.Category, error) {
 	var category model.Category
-
-	db := connection.GetConnection()
 	err := c.ShouldBindJSON(&category)
-
 	if err != nil {
 		return category, err
 	}
-
-	db.Create(&category)
-	defer db.Close()
-
+	connection.GetConnection().Create(&category)
 	return category, nil
 }
 
@@ -44,27 +44,24 @@ func (cs *categoryService) Delete(c *gin.Context) {
 }
 
 func (cs *categoryService) Update(c *gin.Context) {
-	var category model.Category
-	c.BindJSON(&category)
-	log.Print(category)
-	db := connection.GetConnection()
-	db.Find(&category, category.ID)
-	log.Print(category)
-
+	var categoryPatch CategoryPatch
+	c.BindJSON(&categoryPatch)
+	log.Print(categoryPatch)
+	connection.GetConnection().Model(&model.Category{}).Select("*").Where("category_id = ?", categoryPatch.ID).Updates(categoryPatch)
+	// log.Print(category)
 }
 
 func (cs *categoryService) GetbyId(c *gin.Context) model.Category {
 	var category model.Category
-	db := connection.GetConnection()
-	db.Find(&category, c.Param("id"))
-	db.Close()
+	connection.GetConnection().Find(&category, c.Param("id"))
 	return category
 }
 
 func (cs *categoryService) GetAll() []model.Category {
 	var category []model.Category
-	db := connection.GetConnection()
-	db.Find(&category)
-	db.Close()
+	connection.GetConnection().Find(&category)
+
+	//Preloads the relationship
+	//db.Preload("Products").Find(&category)
 	return category
 }

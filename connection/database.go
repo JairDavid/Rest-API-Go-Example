@@ -35,6 +35,8 @@ func getDbInstance() {
 		uri := os.Getenv("DATABASE_URI_DEV")
 		db, err := gorm.Open("postgres", uri)
 		database = db
+		database.DB().SetMaxIdleConns(10)
+		database.DB().SetMaxOpenConns(100)
 		if err != nil {
 			log.Fatal(err)
 		} else {

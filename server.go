@@ -23,7 +23,7 @@ func main() {
 
 	//choosing driver database
 	connection.Driver("postgres")
-
+	defer connection.GetConnection().Close()
 	routes.StartRouting(server)
 
 	//initial migrations
