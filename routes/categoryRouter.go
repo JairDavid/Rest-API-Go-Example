@@ -37,4 +37,13 @@ func CategoryRouter(api *gin.RouterGroup) {
 	category.PATCH("/", func(c *gin.Context) {
 		categoryService.Update(c)
 	})
+
+	category.DELETE("/", func(c *gin.Context) {
+		categoryObj, err := categoryService.Delete(c)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"data": categoryObj})
+		}
+	})
 }

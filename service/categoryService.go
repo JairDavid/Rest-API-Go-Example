@@ -10,7 +10,7 @@ import (
 
 type Methods interface {
 	Create(c *gin.Context) (model.Category, error)
-	Delete(c *gin.Context)
+	Delete(c *gin.Context) (model.Category, error)
 	Update(c *gin.Context)
 	GetAll() []model.Category
 	GetbyId(c *gin.Context) model.Category
@@ -39,8 +39,14 @@ func (cs *categoryService) Create(c *gin.Context) (model.Category, error) {
 	return category, nil
 }
 
-func (cs *categoryService) Delete(c *gin.Context) {
-
+func (cs *categoryService) Delete(c *gin.Context) (model.Category, error) {
+	var category model.Category
+	err := c.ShouldBindJSON(&category)
+	if err != nil {
+		return category, err
+	}
+	connection.GetConnection().Delete(&category)
+	return category, err
 }
 
 func (cs *categoryService) Update(c *gin.Context) {
