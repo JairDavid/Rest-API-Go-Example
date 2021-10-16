@@ -44,10 +44,15 @@ func (cs *categoryService) Delete(c *gin.Context) {
 }
 
 func (cs *categoryService) Update(c *gin.Context) {
+	//dummy patch, could be better
+
 	var categoryPatch CategoryPatch
+	var category model.Category
 	c.BindJSON(&categoryPatch)
 	log.Print(categoryPatch)
-	connection.GetConnection().Model(&model.Category{}).Select("*").Where("category_id = ?", categoryPatch.ID).Updates(categoryPatch)
+	connection.GetConnection().Find(&category, categoryPatch.ID)
+
+	//connection.GetConnection().Model(&model.Category{}).Update(category)
 	// log.Print(category)
 }
 
