@@ -9,7 +9,7 @@ import (
 
 func CategoryRouter(api *gin.RouterGroup) {
 	category := *api.Group("/category")
-	categoryService := service.New()
+	categoryService := service.NewCategoryRepository()
 
 	category.POST("/", func(c *gin.Context) {
 		categoryObj, err := categoryService.Create(c)

@@ -6,7 +6,7 @@ import (
 	"github.com/rest-api-market/model"
 )
 
-type Methods interface {
+type CategoryRepository interface {
 	Create(c *gin.Context) (model.Category, error)
 	Delete(c *gin.Context) (model.Category, error)
 	Update(c *gin.Context)
@@ -17,7 +17,7 @@ type Methods interface {
 type categoryService struct {
 }
 
-func New() Methods {
+func NewCategoryRepository() CategoryRepository {
 	return &categoryService{}
 }
 
