@@ -10,8 +10,8 @@ type CustomerRepository interface {
 	Create(c *gin.Context) (model.Customer, error)
 	Delete(c *gin.Context) (model.Customer, error)
 	// Update(c *gin.Context)
-	// GetById(c *gin.Context) model.Customer
-	// GetAll() []model.Customer
+	GetById(c *gin.Context) model.Customer
+	GetAll() []model.Customer
 }
 
 type customerService struct {
@@ -40,4 +40,16 @@ func (cs *customerService) Delete(c *gin.Context) (model.Customer, error) {
 	}
 	connection.GetConnection().Delete(&customer, &customer.ID)
 	return customer, nil
+}
+
+func (cs *customerService) GetById(c *gin.Context) model.Customer {
+	var customer model.Customer
+	connection.GetConnection().Find(&customer, c.Param("id"))
+	return customer
+}
+
+func (cs *customerService) GetAll() []model.Customer {
+	var customers []model.Customer
+	connection.GetConnection().Find(&customers)
+	return customers
 }
