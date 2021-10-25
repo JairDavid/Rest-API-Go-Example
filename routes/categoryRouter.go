@@ -27,7 +27,7 @@ func CategoryRouter(api *gin.RouterGroup) {
 	category.POST("/", func(c *gin.Context) {
 		categoryObj, err := categoryService.Create(c)
 		if err != nil {
-			c.JSON(http.StatusCreated, gin.H{"data": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
 		} else {
 			c.JSON(http.StatusCreated, gin.H{"data": categoryObj})
 		}

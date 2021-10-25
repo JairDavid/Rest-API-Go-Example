@@ -26,6 +26,7 @@ func (ps *productService) Create(c *gin.Context) (model.Product, error) {
 	if err != nil {
 		return product, err
 	}
+	connection.GetConnection().Create(&product)
 	return product, nil
 }
 

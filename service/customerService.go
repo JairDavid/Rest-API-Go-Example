@@ -38,8 +38,8 @@ func (cs *customerService) Delete(c *gin.Context) (model.Customer, error) {
 	if err != nil {
 		return customer, err
 	}
-	connection.GetConnection().Delete(&customer, &customer.ID)
-	return customer, nil
+	connection.GetConnection().Delete(&customer, customer.ID)
+	return customer, err
 }
 
 func (cs *customerService) GetById(c *gin.Context) model.Customer {

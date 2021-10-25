@@ -29,18 +29,18 @@ func CustomerRouter(api *gin.RouterGroup) {
 	customer.POST("/", func(c *gin.Context) {
 		customerObj, err := customerService.Create(c)
 		if err != nil {
-			c.JSON(http.StatusNotFound, gin.H{"data": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
 		} else {
 			c.JSON(http.StatusOK, gin.H{"data": customerObj})
 		}
 	})
 
-	customer.DELETE("/", func(c *gin.Context) {
+	customer.DELETE("/:id", func(c *gin.Context) {
 		customerObj, err := customerService.Delete(c)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
-			c.JSON(http.StatusNotFound, gin.H{"data": customerObj})
+			c.JSON(http.StatusOK, gin.H{"data": customerObj})
 		}
 	})
 }

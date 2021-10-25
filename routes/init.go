@@ -9,6 +9,4 @@ func StartRouting(server *gin.Engine) {
 	CategoryRouter(&api)
 	CustomerRouter(&api)
 	ProductRouter(&api)
-	CustomerProductRouter(&api)
-
 }
