@@ -35,6 +35,10 @@ func CustomerRouter(api *gin.RouterGroup) {
 		}
 	})
 
+	customer.POST("/multi", func(c *gin.Context) {
+		customerService.MultilCreate(c)
+	})
+
 	customer.DELETE("/:id", func(c *gin.Context) {
 		customerObj, err := customerService.Delete(c)
 		if err != nil {

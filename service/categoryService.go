@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rest-api-market/connection"
 	"github.com/rest-api-market/model"
@@ -44,14 +46,13 @@ func (cs *categoryService) Delete(c *gin.Context) (model.Category, error) {
 
 func (cs *categoryService) Update(c *gin.Context) {
 	//dummy patch, could be better
-
-	// var category model.Category
-	// c.BindJSON(&categoryPatch)
-	// log.Print(categoryPatch)
-	// connection.GetConnection().Find(&category, categoryPatch.ID)
-
-	//connection.GetConnection().Model(&model.Category{}).Update(category)
-	// log.Print(category)
+	var categoryObj model.Category
+	var m map[string]interface{}
+	c.Bind(&m)
+	log.Print(m)
+	connection.GetConnection().Find(&categoryObj, c.Param("id"))
+	log.Print(categoryObj)
+	connection.GetConnection().Model(&model.Category{}).Where(c.Param("id")).Updates(m)
 }
 
 func (cs *categoryService) GetbyId(c *gin.Context) model.Category {

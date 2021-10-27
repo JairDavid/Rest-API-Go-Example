@@ -34,7 +34,7 @@ func CategoryRouter(api *gin.RouterGroup) {
 	})
 
 	//testing it does not work yet
-	category.PATCH("/", func(c *gin.Context) {
+	category.PATCH("/:id", func(c *gin.Context) {
 		categoryService.Update(c)
 	})
 

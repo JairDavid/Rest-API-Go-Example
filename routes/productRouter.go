@@ -12,7 +12,7 @@ func ProductRouter(api *gin.RouterGroup) {
 	product := *api.Group("/product")
 	productService := service.NewProductService()
 	product.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": productService.GetAll()})
+		c.JSON(http.StatusOK, gin.H{"data": productService.GetAll()})
 	})
 
 	product.GET("/:id", func(c *gin.Context) {
@@ -20,7 +20,7 @@ func ProductRouter(api *gin.RouterGroup) {
 		if product.Name == "" {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
-			c.JSON(http.StatusOK, gin.H{"data": "data"})
+			c.JSON(http.StatusOK, gin.H{"data": product})
 		}
 	})
 
