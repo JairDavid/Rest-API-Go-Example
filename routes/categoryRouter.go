@@ -38,11 +38,11 @@ func CategoryRouter(api *gin.RouterGroup) {
 		categoryObj, status := categoryService.Update(c)
 		switch status {
 		case 1:
-			c.JSON(http.StatusNoContent, gin.H{"data": status})
+			c.JSON(http.StatusNoContent, gin.H{"data": "Empty request body"})
 		case 2:
-			c.JSON(http.StatusNotFound, gin.H{"data": status})
+			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		case 3:
-			c.JSON(http.StatusExpectationFailed, gin.H{"data": status})
+			c.JSON(http.StatusExpectationFailed, gin.H{"data": "Attributes do not match"})
 		case 4:
 			c.JSON(http.StatusOK, gin.H{"data": categoryObj})
 		}

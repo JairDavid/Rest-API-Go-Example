@@ -54,14 +54,15 @@ func (cs *categoryService) Update(c *gin.Context) (model.Category, interface{}) 
 		//case 1: there's nothing in the request body
 		return category, 1
 	}
-	statusFind := connection.GetConnection().Find(&category, c.Param("id"))
-	if statusFind != nil {
+	connection.GetConnection().Find(&category, c.Param("id"))
+	if category.Name == "" {
 		//case 2: inexistent ID
 		return category, 2
 	}
 
 	statusUpdate := connection.GetConnection().Model(&model.Category{}).Where(c.Param("id")).Updates(dinamicAtributes)
-	if statusUpdate != nil {
+
+	if statusUpdate.RowsAffected == 0 {
 		//case 3: there's no matching data from the request body with the database attributes
 		return category, 3
 	} else {
