@@ -33,9 +33,19 @@ func CategoryRouter(api *gin.RouterGroup) {
 		}
 	})
 
-	//testing it does not work yet
+	//it works, but i need to improve this method
 	category.PATCH("/:id", func(c *gin.Context) {
-		categoryService.Update(c)
+		categoryObj, status := categoryService.Update(c)
+		switch status {
+		case 1:
+			c.JSON(http.StatusNoContent, gin.H{"data": status})
+		case 2:
+			c.JSON(http.StatusNotFound, gin.H{"data": status})
+		case 3:
+			c.JSON(http.StatusExpectationFailed, gin.H{"data": status})
+		case 4:
+			c.JSON(http.StatusOK, gin.H{"data": categoryObj})
+		}
 	})
 
 	category.DELETE("/:id", func(c *gin.Context) {
