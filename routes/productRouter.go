@@ -11,6 +11,7 @@ func ProductRouter(api *gin.RouterGroup) {
 
 	product := *api.Group("/product")
 	productService := service.NewProductService()
+
 	product.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": productService.GetAll()})
 	})
@@ -31,6 +32,10 @@ func ProductRouter(api *gin.RouterGroup) {
 		} else {
 			c.JSON(http.StatusCreated, gin.H{"data": product})
 		}
+	})
+
+	product.PATCH("/:id", func(c *gin.Context) {
+
 	})
 
 	product.DELETE("/:id", func(c *gin.Context) {

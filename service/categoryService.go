@@ -38,7 +38,7 @@ func (cs *categoryService) Delete(c *gin.Context) (model.Category, error) {
 	if err != nil {
 		return category, err
 	}
-	connection.GetConnection().Delete(&category, category.ID)
+	connection.GetConnection().Unscoped().Delete(&category, category.ID)
 	return category, err
 }
 
@@ -55,7 +55,7 @@ func (cs *categoryService) Update(c *gin.Context) (model.Category, interface{}) 
 		return category, 1
 	}
 	connection.GetConnection().Find(&category, c.Param("id"))
-	if category.Name == "" {
+	if category.ID == 0 {
 		//case 2: inexistent ID
 		return category, 2
 	}
@@ -80,7 +80,7 @@ func (cs *categoryService) GetbyId(c *gin.Context) model.Category {
 
 func (cs *categoryService) GetAll() []model.Category {
 	var category []model.Category
-	connection.GetConnection().Find(&category)
+	connection.GetConnection().Preload("Products").Find(&category)
 
 	//Preloads the relationship
 	//db.Preload("Products").Find(&category)

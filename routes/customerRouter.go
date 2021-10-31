@@ -10,7 +10,6 @@ import (
 func CustomerRouter(api *gin.RouterGroup) {
 
 	customer := *api.Group("/customer")
-
 	customerService := service.NewCustomerService()
 
 	customer.GET("/", func(c *gin.Context) {
@@ -35,8 +34,8 @@ func CustomerRouter(api *gin.RouterGroup) {
 		}
 	})
 
-	customer.POST("/multi", func(c *gin.Context) {
-		customerService.MultilCreate(c)
+	customer.PATCH("/:id", func(c *gin.Context) {
+
 	})
 
 	customer.DELETE("/:id", func(c *gin.Context) {

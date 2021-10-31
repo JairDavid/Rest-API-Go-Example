@@ -8,6 +8,7 @@ import (
 )
 
 func CategoryRouter(api *gin.RouterGroup) {
+
 	category := *api.Group("/category")
 	categoryService := service.NewCategoryRepository()
 

@@ -37,7 +37,7 @@ func (ps *productService) Delete(c *gin.Context) (model.Product, error) {
 	if err != nil {
 		return product, err
 	}
-	connection.GetConnection().Delete(&product, product.ID)
+	connection.GetConnection().Unscoped().Delete(&product, product.ID)
 	return product, nil
 }
 
