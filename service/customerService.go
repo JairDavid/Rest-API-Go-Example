@@ -9,7 +9,7 @@ import (
 type CustomerRepository interface {
 	Create(c *gin.Context) (model.Customer, error)
 	Delete(c *gin.Context) (model.Customer, error)
-	// Update(c *gin.Context)
+	Update(c *gin.Context) (model.Customer, interface{})
 	GetById(c *gin.Context) model.Customer
 	GetAll() []model.Customer
 }
@@ -42,6 +42,34 @@ func (cs *customerService) Delete(c *gin.Context) (model.Customer, error) {
 	//connection.GetConnection().Delete(&customer, customer.ID)
 	connection.GetConnection().Unscoped().Delete(&customer, customer.ID)
 	return customer, err
+}
+
+func (cs *customerService) Update(c *gin.Context) (model.Customer, interface{}) {
+	var dinamicAtributes map[string]interface{}
+	var customer model.Customer
+	c.Bind(&dinamicAtributes)
+
+	if dinamicAtributes == nil {
+		//case 1: there's nothing in the request body
+		return customer, 1
+	}
+	connection.GetConnection().Find(&customer, c.Param("id"))
+	if customer.ID == 0 {
+		//case 2: inexistent ID
+		return customer, 2
+	}
+
+	statusUpdate := connection.GetConnection().Model(&model.Customer{}).Where(c.Param("id")).Updates(dinamicAtributes)
+
+	if statusUpdate.RowsAffected == 0 {
+		//case 3: there's no matching data from the request body with the database attributes
+		return customer, 3
+	} else {
+		connection.GetConnection().Find(&customer, c.Param("id"))
+	}
+	//case 4: Correct operation
+	return customer, 4
+
 }
 
 func (cs *customerService) GetById(c *gin.Context) model.Customer {
