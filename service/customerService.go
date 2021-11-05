@@ -80,6 +80,6 @@ func (cs *customerService) GetById(c *gin.Context) model.Customer {
 
 func (cs *customerService) GetAll() []model.Customer {
 	var customers []model.Customer
-	connection.GetConnection().Find(&customers)
+	connection.GetConnection().Preload("CustomerProducts").Find(&customers)
 	return customers
 }

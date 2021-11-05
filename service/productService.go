@@ -78,6 +78,11 @@ func (ps *productService) GetById(c *gin.Context) model.Product {
 
 func (ps *productService) GetAll() []model.Product {
 	var products []model.Product
-	connection.GetConnection().Find(&products)
+	connection.GetConnection().Preload("Customers").Find(&products)
 	return products
 }
+
+//mostrar los clientes que tienen el producto X
+
+//select * from products
+//JOIN customer_products ON customer_id
