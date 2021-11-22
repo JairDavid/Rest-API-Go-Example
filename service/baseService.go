@@ -9,7 +9,7 @@ type Repository interface {
 	Delete(c *gin.Context) (interface{}, error)
 	Update(c *gin.Context) (interface{}, interface{})
 	GetById(c *gin.Context) interface{}
-	GetAll() []map[string]interface{}
+	GetAll() interface{}
 }
 
 func Create(r Repository, c *gin.Context) {

@@ -70,8 +70,8 @@ func (cs *CustomerService) GetById(c *gin.Context) interface{} {
 	return customer
 }
 
-func (cs *CustomerService) GetAll() []map[string]interface{} {
-	var customers []map[string]interface{}
+func (cs *CustomerService) GetAll() interface{} {
+	var customers []model.Customer
 	connection.GetConnection().Preload("CustomerProducts").Find(&customers)
 	return customers
 }

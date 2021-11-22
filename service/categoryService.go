@@ -70,10 +70,10 @@ func (cs *CategoryService) GetById(c *gin.Context) interface{} {
 	return category
 }
 
-func (cs *CategoryService) GetAll() []map[string]interface{} {
-	var category []map[string]interface{}
-	connection.GetConnection().Model(&model.Category{}).Find(&category)
+func (cs *CategoryService) GetAll() interface{} {
+	var category []model.Category
+	//connection.GetConnection().Model(&model.Category{}).Find(&category)
 	//Preloads the relationship
-	//db.Preload("Products").Find(&category)
+	connection.GetConnection().Preload("Products").Find(&category)
 	return category
 }

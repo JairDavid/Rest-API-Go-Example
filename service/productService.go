@@ -68,8 +68,8 @@ func (ps *ProductService) GetById(c *gin.Context) interface{} {
 	return product
 }
 
-func (ps *ProductService) GetAll() []map[string]interface{} {
-	var products []map[string]interface{}
+func (ps *ProductService) GetAll() interface{} {
+	var products []model.Product
 	connection.GetConnection().Preload("Customers").Find(&products)
 	return products
 }

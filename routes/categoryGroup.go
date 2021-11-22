@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rest-api-market/model"
 	"github.com/rest-api-market/service"
 )
 
@@ -13,30 +14,35 @@ func CategoryRouter(api *gin.RouterGroup) {
 	var categoryService service.CategoryService
 
 	category.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": service.Repository.GetAll(&categoryService)})
+		T := service.Repository.GetAll(&categoryService)
+		categories := T.([]model.Category)
+		c.JSON(http.StatusOK, gin.H{"data": categories})
 	})
 
 	category.GET("/:id", func(c *gin.Context) {
-		categoryObj := categoryService.GetById(c)
-		if categoryObj == nil {
+		T := service.Repository.GetById(&categoryService, c)
+		category := T.(model.Category)
+		if category.Name == "" {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
-			c.JSON(http.StatusOK, gin.H{"data": categoryObj})
+			c.JSON(http.StatusOK, gin.H{"data": category})
 		}
 	})
 
 	category.POST("/", func(c *gin.Context) {
-		categoryObj, err := categoryService.Create(c)
+		T, err := service.Repository.Create(&categoryService, c)
+		category := T.(model.Category)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
 		} else {
-			c.JSON(http.StatusCreated, gin.H{"data": categoryObj})
+			c.JSON(http.StatusCreated, gin.H{"data": category})
 		}
 	})
 
 	//it works, but i need to improve this method
 	category.PATCH("/:id", func(c *gin.Context) {
-		categoryObj, status := categoryService.Update(c)
+		T, status := service.Repository.Update(&categoryService, c)
+		category := T.(model.Category)
 		switch status {
 		case 1:
 			c.JSON(http.StatusNoContent, gin.H{"data": "Empty request body"})
@@ -45,16 +51,17 @@ func CategoryRouter(api *gin.RouterGroup) {
 		case 3:
 			c.JSON(http.StatusExpectationFailed, gin.H{"data": "Attributes do not match"})
 		case 4:
-			c.JSON(http.StatusOK, gin.H{"data": categoryObj})
+			c.JSON(http.StatusOK, gin.H{"data": category})
 		}
 	})
 
 	category.DELETE("/:id", func(c *gin.Context) {
-		categoryObj, err := categoryService.Delete(c)
+		T, err := service.Repository.Delete(&categoryService, c)
+		category := T.(model.Category)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
-			c.JSON(http.StatusOK, gin.H{"data": categoryObj})
+			c.JSON(http.StatusOK, gin.H{"data": category})
 		}
 	})
 }
