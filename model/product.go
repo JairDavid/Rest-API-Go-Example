@@ -7,6 +7,6 @@ type Product struct {
 	Name       string  `json:"name" binding:"required" gorm:"type:varchar(50);not null"`
 	Price      float64 `json:"price" binding:"required" gorm:"not null"`
 	Stock      int16   `json:"stock" binding:"required" gorm:"not null"`
-	CategoryID int     `json:"categoryId" binding:"required"`
+	CategoryID uint    `json:"categoryId" binding:"required"`
 	Customers  []CustomerProduct
 }

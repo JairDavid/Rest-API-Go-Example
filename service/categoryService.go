@@ -6,22 +6,14 @@ import (
 	"github.com/rest-api-market/model"
 )
 
-type CategoryRepository interface {
-	Create(c *gin.Context) (model.Category, error)
-	Delete(c *gin.Context) (model.Category, error)
-	Update(c *gin.Context) (model.Category, interface{})
-	GetAll() []model.Category
-	GetbyId(c *gin.Context) model.Category
+type CategoryService struct {
 }
 
-type categoryService struct {
+func NewCategoryRepository() Repository {
+	return &CategoryService{}
 }
 
-func NewCategoryRepository() CategoryRepository {
-	return &categoryService{}
-}
-
-func (cs *categoryService) Create(c *gin.Context) (model.Category, error) {
+func (cs *CategoryService) Create(c *gin.Context) (interface{}, error) {
 	var category model.Category
 	err := c.ShouldBindJSON(&category)
 	if err != nil {
@@ -31,7 +23,7 @@ func (cs *categoryService) Create(c *gin.Context) (model.Category, error) {
 	return category, nil
 }
 
-func (cs *categoryService) Delete(c *gin.Context) (model.Category, error) {
+func (cs *CategoryService) Delete(c *gin.Context) (interface{}, error) {
 	var category model.Category
 	connection.GetConnection().Find(&category, c.Param("id"))
 	err := c.ShouldBindJSON(&category)
@@ -42,7 +34,7 @@ func (cs *categoryService) Delete(c *gin.Context) (model.Category, error) {
 	return category, err
 }
 
-func (cs *categoryService) Update(c *gin.Context) (model.Category, interface{}) {
+func (cs *CategoryService) Update(c *gin.Context) (interface{}, interface{}) {
 	//implementing patch method, it could be better.
 	var category model.Category
 
@@ -72,16 +64,15 @@ func (cs *categoryService) Update(c *gin.Context) (model.Category, interface{}) 
 	return category, 4
 }
 
-func (cs *categoryService) GetbyId(c *gin.Context) model.Category {
+func (cs *CategoryService) GetById(c *gin.Context) interface{} {
 	var category model.Category
 	connection.GetConnection().Find(&category, c.Param("id"))
 	return category
 }
 
-func (cs *categoryService) GetAll() []model.Category {
-	var category []model.Category
-	connection.GetConnection().Preload("Products").Find(&category)
-
+func (cs *CategoryService) GetAll() []map[string]interface{} {
+	var category []map[string]interface{}
+	connection.GetConnection().Model(&model.Category{}).Find(&category)
 	//Preloads the relationship
 	//db.Preload("Products").Find(&category)
 	return category

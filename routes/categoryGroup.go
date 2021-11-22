@@ -10,15 +10,15 @@ import (
 func CategoryRouter(api *gin.RouterGroup) {
 
 	category := *api.Group("/category")
-	categoryService := service.NewCategoryRepository()
+	var categoryService service.CategoryService
 
 	category.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": categoryService.GetAll()})
+		c.JSON(http.StatusOK, gin.H{"data": service.Repository.GetAll(&categoryService)})
 	})
 
 	category.GET("/:id", func(c *gin.Context) {
-		categoryObj := categoryService.GetbyId(c)
-		if categoryObj.Name == "" {
+		categoryObj := categoryService.GetById(c)
+		if categoryObj == nil {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
 			c.JSON(http.StatusOK, gin.H{"data": categoryObj})

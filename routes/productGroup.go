@@ -18,7 +18,7 @@ func ProductRouter(api *gin.RouterGroup) {
 
 	product.GET("/:id", func(c *gin.Context) {
 		productobj := productService.GetById(c)
-		if productobj.Name == "" {
+		if productobj == "" {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
 			c.JSON(http.StatusOK, gin.H{"data": productobj})

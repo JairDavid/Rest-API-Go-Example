@@ -1,12 +1,8 @@
 package testing
 
-import (
-	"github.com/rest-api-market/connection"
-)
-
 //Testing Insertions
 func Insert() {
-	db := connection.GetConnection()
+	//db := connection.GetConnection()
 
 	// category1 := model.Category{Name: "Linea blanca", Description: "productos de linea blanca"}
 	// category2 := model.Category{Name: "Muebleria", Description: "Productos de muebleria"}
@@ -53,5 +49,5 @@ func Insert() {
 	// db.Model(&model.CustomerProduct{}).Create(compra5)
 	// db.Model(&model.CustomerProduct{}).Create(compra6)
 
-	defer db.Close()
+	//defer db.Close()
 }

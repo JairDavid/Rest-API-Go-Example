@@ -6,9 +6,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	"github.com/rest-api-market/model"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var (
@@ -33,10 +34,9 @@ func getDbInstance() {
 		}
 
 		uri := os.Getenv("DATABASE_URI_DEV")
-		db, err := gorm.Open("postgres", uri)
+		db, err := gorm.Open(postgres.Open(uri), &gorm.Config{})
+
 		database = db
-		database.DB().SetMaxIdleConns(10)
-		database.DB().SetMaxOpenConns(100)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -53,10 +53,10 @@ func GetConnection() *gorm.DB {
 //database migrations
 func StartMigrations() {
 	db := GetConnection()
-	defer db.Close()
 	db.AutoMigrate(&model.Category{}, &model.Product{}, &model.Customer{}, &model.CustomerProduct{})
 
-	db.AutoMigrate(&model.Product{}).AddForeignKey("category_id", "categories(id)", "RESTRICT", "RESTRICT")
-	db.AutoMigrate(&model.CustomerProduct{}).AddForeignKey("customer_id", "customers(id)", "RESTRICT", "RESTRICT")
-	db.AutoMigrate(&model.CustomerProduct{}).AddForeignKey("product_id", "products(id)", "RESTRICT", "RESTRICT")
+	//Deprecated
+	// db.AutoMigrate(&model.Product{}).AddForeignKey("category_id", "categories(id)", "RESTRICT", "RESTRICT")
+	// db.AutoMigrate(&model.CustomerProduct{}).AddForeignKey("customer_id", "customers(id)", "RESTRICT", "RESTRICT")
+	// db.AutoMigrate(&model.CustomerProduct{}).AddForeignKey("product_id", "products(id)", "RESTRICT", "RESTRICT")
 }

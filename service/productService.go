@@ -6,22 +6,14 @@ import (
 	"github.com/rest-api-market/model"
 )
 
-type ProductRepository interface {
-	Create(c *gin.Context) (model.Product, error)
-	Delete(c *gin.Context) (model.Product, error)
-	Update(c *gin.Context) (model.Product, interface{})
-	GetById(c *gin.Context) model.Product
-	GetAll() []model.Product
+type ProductService struct {
 }
 
-type productService struct {
+func NewProductService() Repository {
+	return &ProductService{}
 }
 
-func NewProductService() ProductRepository {
-	return &productService{}
-}
-
-func (ps *productService) Create(c *gin.Context) (model.Product, error) {
+func (ps *ProductService) Create(c *gin.Context) (interface{}, error) {
 	var product model.Product
 	err := c.ShouldBindJSON(&product)
 	if err != nil {
@@ -31,7 +23,7 @@ func (ps *productService) Create(c *gin.Context) (model.Product, error) {
 	return product, nil
 }
 
-func (ps *productService) Delete(c *gin.Context) (model.Product, error) {
+func (ps *ProductService) Delete(c *gin.Context) (interface{}, error) {
 	var product model.Product
 	connection.GetConnection().Find(&product, c.Param("id"))
 	err := c.ShouldBindJSON(&product)
@@ -42,7 +34,7 @@ func (ps *productService) Delete(c *gin.Context) (model.Product, error) {
 	return product, nil
 }
 
-func (ps *productService) Update(c *gin.Context) (model.Product, interface{}) {
+func (ps *ProductService) Update(c *gin.Context) (interface{}, interface{}) {
 	var dinamicAtributes map[string]interface{}
 	var product model.Product
 	c.Bind(&dinamicAtributes)
@@ -70,19 +62,14 @@ func (ps *productService) Update(c *gin.Context) (model.Product, interface{}) {
 
 }
 
-func (ps *productService) GetById(c *gin.Context) model.Product {
+func (ps *ProductService) GetById(c *gin.Context) interface{} {
 	var product model.Product
 	connection.GetConnection().Find(&product, c.Param("id"))
 	return product
 }
 
-func (ps *productService) GetAll() []model.Product {
-	var products []model.Product
+func (ps *ProductService) GetAll() []map[string]interface{} {
+	var products []map[string]interface{}
 	connection.GetConnection().Preload("Customers").Find(&products)
 	return products
 }
-
-//mostrar los clientes que tienen el producto X
-
-//select * from products
-//JOIN customer_products ON customer_id

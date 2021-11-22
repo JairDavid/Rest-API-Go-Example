@@ -6,22 +6,14 @@ import (
 	"github.com/rest-api-market/model"
 )
 
-type CustomerRepository interface {
-	Create(c *gin.Context) (model.Customer, error)
-	Delete(c *gin.Context) (model.Customer, error)
-	Update(c *gin.Context) (model.Customer, interface{})
-	GetById(c *gin.Context) model.Customer
-	GetAll() []model.Customer
+type CustomerService struct {
 }
 
-type customerService struct {
+func NewCustomerService() Repository {
+	return &CustomerService{}
 }
 
-func NewCustomerService() CustomerRepository {
-	return &customerService{}
-}
-
-func (cs *customerService) Create(c *gin.Context) (model.Customer, error) {
+func (cs *CustomerService) Create(c *gin.Context) (interface{}, error) {
 	var customer model.Customer
 	err := c.ShouldBindJSON(&customer)
 	if err != nil {
@@ -31,7 +23,7 @@ func (cs *customerService) Create(c *gin.Context) (model.Customer, error) {
 	return customer, nil
 }
 
-func (cs *customerService) Delete(c *gin.Context) (model.Customer, error) {
+func (cs *CustomerService) Delete(c *gin.Context) (interface{}, error) {
 	var customer model.Customer
 	connection.GetConnection().Find(&customer, c.Param("id"))
 	err := c.ShouldBindJSON(&customer)
@@ -44,7 +36,7 @@ func (cs *customerService) Delete(c *gin.Context) (model.Customer, error) {
 	return customer, err
 }
 
-func (cs *customerService) Update(c *gin.Context) (model.Customer, interface{}) {
+func (cs *CustomerService) Update(c *gin.Context) (interface{}, interface{}) {
 	var dinamicAtributes map[string]interface{}
 	var customer model.Customer
 	c.Bind(&dinamicAtributes)
@@ -72,14 +64,14 @@ func (cs *customerService) Update(c *gin.Context) (model.Customer, interface{}) 
 
 }
 
-func (cs *customerService) GetById(c *gin.Context) model.Customer {
+func (cs *CustomerService) GetById(c *gin.Context) interface{} {
 	var customer model.Customer
 	connection.GetConnection().Find(&customer, c.Param("id"))
 	return customer
 }
 
-func (cs *customerService) GetAll() []model.Customer {
-	var customers []model.Customer
+func (cs *CustomerService) GetAll() []map[string]interface{} {
+	var customers []map[string]interface{}
 	connection.GetConnection().Preload("CustomerProducts").Find(&customers)
 	return customers
 }
