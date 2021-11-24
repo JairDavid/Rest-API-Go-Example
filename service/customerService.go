@@ -72,6 +72,6 @@ func (cs *CustomerService) GetById(c *gin.Context) interface{} {
 
 func (cs *CustomerService) GetAll() interface{} {
 	var customers []model.Customer
-	connection.GetConnection().Preload("CustomerProducts").Find(&customers)
+	connection.GetConnection().Find(&customers)
 	return customers
 }

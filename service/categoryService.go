@@ -66,7 +66,7 @@ func (cs *CategoryService) Update(c *gin.Context) (interface{}, interface{}) {
 
 func (cs *CategoryService) GetById(c *gin.Context) interface{} {
 	var category model.Category
-	connection.GetConnection().Find(&category, c.Param("id"))
+	connection.GetConnection().Preload("Products").Find(&category, c.Param("id"))
 	return category
 }
 

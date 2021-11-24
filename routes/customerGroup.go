@@ -4,21 +4,26 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rest-api-market/model"
 	"github.com/rest-api-market/service"
 )
 
 func CustomerRouter(api *gin.RouterGroup) {
 
 	customer := *api.Group("/customer")
-	customerService := service.NewCustomerService()
+	var customerService service.CustomerService
 
 	customer.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": customerService.GetAll()})
+		T := service.Repository.GetAll(&customerService)
+		customers := T.([]model.Customer)
+		c.JSON(http.StatusOK, gin.H{"data": customers})
 	})
 
 	customer.GET("/:id", func(c *gin.Context) {
-		customer := customerService.GetById(c)
-		if customer == "" {
+		T := service.Repository.GetById(&customerService, c)
+		customer := T.(model.Customer)
+
+		if customer.Name == "" {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
 			c.JSON(http.StatusOK, gin.H{"data": customer})
@@ -26,18 +31,18 @@ func CustomerRouter(api *gin.RouterGroup) {
 	})
 
 	customer.POST("/", func(c *gin.Context) {
-		customerObj, err := customerService.Create(c)
+		T, err := service.Repository.Create(&customerService, c)
+		customer := T.(model.Customer)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
 		} else {
-			c.JSON(http.StatusOK, gin.H{"data": customerObj})
+			c.JSON(http.StatusOK, gin.H{"data": customer})
 		}
 	})
 
 	customer.PATCH("/:id", func(c *gin.Context) {
-
-		customerObj, status := customerService.Update(c)
-
+		T, status := service.Repository.Update(&customerService, c)
+		customer := T.(model.Customer)
 		switch status {
 		case 1:
 			c.JSON(http.StatusNoContent, gin.H{"data": "Empty request body"})
@@ -46,16 +51,17 @@ func CustomerRouter(api *gin.RouterGroup) {
 		case 3:
 			c.JSON(http.StatusExpectationFailed, gin.H{"data": "Attributes do not match"})
 		case 4:
-			c.JSON(http.StatusOK, gin.H{"data": customerObj})
+			c.JSON(http.StatusOK, gin.H{"data": customer})
 		}
 	})
 
 	customer.DELETE("/:id", func(c *gin.Context) {
-		customerObj, err := customerService.Delete(c)
+		T, err := service.Repository.Delete(&customerService, c)
+		customer := T.(model.Customer)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"data": "Not found"})
 		} else {
-			c.JSON(http.StatusOK, gin.H{"data": customerObj})
+			c.JSON(http.StatusOK, gin.H{"data": customer})
 		}
 	})
 }
