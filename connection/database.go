@@ -55,7 +55,7 @@ func StartMigrations() {
 	db := GetConnection()
 	db.AutoMigrate(&model.Category{}, &model.Product{}, &model.Customer{}, &model.CustomerProduct{})
 
-	//Deprecated
+	//Manual Mode
 	// db.AutoMigrate(&model.Product{}).AddForeignKey("category_id", "categories(id)", "RESTRICT", "RESTRICT")
 	// db.AutoMigrate(&model.CustomerProduct{}).AddForeignKey("customer_id", "customers(id)", "RESTRICT", "RESTRICT")
 	// db.AutoMigrate(&model.CustomerProduct{}).AddForeignKey("product_id", "products(id)", "RESTRICT", "RESTRICT")
