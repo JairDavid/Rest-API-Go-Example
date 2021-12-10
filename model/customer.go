@@ -6,5 +6,5 @@ type Customer struct {
 	gorm.Model
 	Name     string    `json:"name" binding:"required" gorm:"type:varchar(50);not null"`
 	Lastname string    `json:"lastname" binding:"required" gorm:"type:varchar(50);not null"`
-	Order    []Product `gorm:"many2many:customer_products;"`
+	Order    []Product `gorm:"many2many:customer_products;" `
 }

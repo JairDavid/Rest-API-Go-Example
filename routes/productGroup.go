@@ -41,7 +41,7 @@ func ProductRouter(api *gin.RouterGroup) {
 
 	product.PATCH("/:id", func(c *gin.Context) {
 		T, status := service.Repository.Update(&productService, c)
-		products := T.([]model.Product)
+		products := T.(model.Product)
 		switch status {
 		case 1:
 			c.JSON(http.StatusNoContent, gin.H{"data": "Empty request body"})
