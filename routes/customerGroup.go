@@ -36,7 +36,7 @@ func CustomerRouter(api *gin.RouterGroup) {
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
 		} else {
-			c.JSON(http.StatusOK, gin.H{"data": customer})
+			c.JSON(http.StatusCreated, gin.H{"data": customer})
 		}
 	})
 
