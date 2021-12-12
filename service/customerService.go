@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rest-api-market/connection"
 	"github.com/rest-api-market/model"
@@ -19,7 +21,16 @@ func (cs *CustomerService) Create(c *gin.Context) (interface{}, error) {
 	if err != nil {
 		return customer, err
 	}
-	connection.GetConnection().Create(&customer)
+	//llave duplicada viola restricción de unicidad «customer_products_pkey» (SQLSTATE 23505)
+	if len(customer.Order) > 0 {
+		connection.GetConnection().Omit("Order").Create(&customer)
+		fmt.Println(customer.ID)
+		for _, product := range customer.Order {
+			connection.GetConnection().Create(&model.CustomerProduct{CustomerID: customer.ID, ProductID: product.ID})
+		}
+	} else {
+		connection.GetConnection().Create(&customer)
+	}
 	return customer, nil
 }
 
