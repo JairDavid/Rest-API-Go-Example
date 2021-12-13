@@ -61,9 +61,7 @@ func (cs *CustomerService) Update(c *gin.Context) (interface{}, interface{}) {
 		//case 2: inexistent ID
 		return customer, 2
 	}
-
 	statusUpdate := connection.GetConnection().Model(&model.Customer{}).Where(c.Param("id")).Updates(dinamicAtributes)
-
 	if statusUpdate.RowsAffected == 0 {
 		//case 3: there's no matching data from the request body with the database attributes
 		return customer, 3
@@ -72,7 +70,6 @@ func (cs *CustomerService) Update(c *gin.Context) (interface{}, interface{}) {
 	}
 	//case 4: Correct operation
 	return customer, 4
-
 }
 
 func (cs *CustomerService) GetById(c *gin.Context) interface{} {
