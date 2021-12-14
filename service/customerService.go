@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rest-api-market/connection"
 	"github.com/rest-api-market/model"
@@ -27,6 +29,8 @@ func (cs *CustomerService) Buy(c *gin.Context) (interface{}, error) {
 			connection.GetConnection().Create(&model.CustomerProduct{CustomerID: customer.ID, ProductID: product.ID})
 		}
 		connection.GetConnection().Preload("Order").Find(&customer)
+	} else {
+		return customer, errors.New("please add products first")
 	}
 	return customer, nil
 }
