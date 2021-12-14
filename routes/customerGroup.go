@@ -40,6 +40,16 @@ func CustomerRouter(api *gin.RouterGroup) {
 		}
 	})
 
+	customer.POST("/:id", func(c *gin.Context) {
+		T, err := customerService.Buy(c)
+		customer := T.(model.Customer)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"data": err.Error()})
+		} else {
+			c.JSON(http.StatusCreated, gin.H{"data": customer})
+		}
+	})
+
 	customer.PATCH("/:id", func(c *gin.Context) {
 		T, status := service.Repository.Update(&customerService, c)
 		customer := T.(model.Customer)

@@ -1,8 +1,6 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/rest-api-market/connection"
 	"github.com/rest-api-market/model"
@@ -11,8 +9,26 @@ import (
 type CustomerService struct {
 }
 
+type Buy struct {
+	Order []model.Product `json:"order"`
+}
+
 func NewCustomerService() Repository {
 	return &CustomerService{}
+}
+
+func (cs *CustomerService) Buy(c *gin.Context) (interface{}, error) {
+	var buy Buy
+	var customer model.Customer
+	c.ShouldBindJSON(&buy)
+	connection.GetConnection().Find(&customer, c.Param("id"))
+	if len(buy.Order) > 0 {
+		for _, product := range buy.Order {
+			connection.GetConnection().Create(&model.CustomerProduct{CustomerID: customer.ID, ProductID: product.ID})
+		}
+		connection.GetConnection().Preload("Order").Find(&customer)
+	}
+	return customer, nil
 }
 
 func (cs *CustomerService) Create(c *gin.Context) (interface{}, error) {
@@ -21,10 +37,9 @@ func (cs *CustomerService) Create(c *gin.Context) (interface{}, error) {
 	if err != nil {
 		return customer, err
 	}
-	//llave duplicada viola restricción de unicidad «customer_products_pkey» (SQLSTATE 23505)
+
 	if len(customer.Order) > 0 {
 		connection.GetConnection().Omit("Order").Create(&customer)
-		fmt.Println(customer.ID)
 		for _, product := range customer.Order {
 			connection.GetConnection().Create(&model.CustomerProduct{CustomerID: customer.ID, ProductID: product.ID})
 		}
