@@ -20,6 +20,7 @@ A restful API example using Gorm (ORM) and postgreSQL. The purpose for which I m
   GET /api/v1/customer/
   GET /api/v1/customer/:id
   POST /api/v1/customer/
+  POST /api/v1/customer/:id
   PATCH /api/v1/customer/:id
   DELETE /api/v1/customer/:id
 ```
