@@ -5,7 +5,7 @@ A restful API example using Gorm (ORM) and postgreSQL. The purpose for which I m
 ## General Table Views
 ![Logo](https://imgdb.net/storage/uploads/c63b9da5526062e5825e16a73e0019bbc07416eb64ddfa797317b89b259fadc9.png)
 
-#### Category Enpoints
+#### Category Endpoints
 
 ```bash
   GET /api/v1/category/
@@ -14,7 +14,7 @@ A restful API example using Gorm (ORM) and postgreSQL. The purpose for which I m
   PATCH /api/v1/items/:id
   DELETE /api/v1/items/:id
 ```
-#### Customer Enpoints
+#### Customer Endpoints
 
 ```bash
   GET /api/v1/customer/
@@ -24,7 +24,7 @@ A restful API example using Gorm (ORM) and postgreSQL. The purpose for which I m
   PATCH /api/v1/customer/:id
   DELETE /api/v1/customer/:id
 ```
-#### Product Enpoints
+#### Product Endpoints
 
 ```bash
   GET /api/v1/product/
@@ -62,7 +62,7 @@ if you do the above settings correctly, everything should be fine, now if you lo
 (Comment again "StartMigrations()" method).
 
 ## Tools used
-- [Gin Framework)](https://gin-gonic.com/)
+- [Gin Framework](https://gin-gonic.com/)
 - [Gorm (ORM)](https://gorm.io/index.html)
 - [Godotenv](https://github.com/joho/godotenv)
 - [Postgres driver](https://github.com/lib/pq)
